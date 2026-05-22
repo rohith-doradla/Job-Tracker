@@ -10,15 +10,25 @@ function ProfilePage() {
     password: '',
   });
 
-  const [isEditEnabled, setEditEnabled] = useState(false);
+  const [isEditEnabled, setIsEditEnabled] = useState(false);
+
+  const [passwordInputs, setPasswordInputs] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+  });
+
+  const [errorMessage, setErrorMessage] = useState();
 
   useEffect(() => {
     const existingUser = JSON.parse(localStorage.getItem('currentUser'));
 
     if (existingUser) {
+      alert('User found');
       console.log('User found:', existingUser);
       setUser(existingUser);
     } else {
+      alert('User Not found');
       console.log('User Not found');
     }
   }, []);
@@ -28,13 +38,42 @@ function ProfilePage() {
   }
 
   function handleEditPassword() {
-    setEditEnabled(true);
+    setIsEditEnabled(true);
+  }
+
+  function handlePasswordChange(e) {
+    setPasswordInputs({ ...passwordInputs, [e.target.name]: e.target.value });
   }
 
   function handleSubmit(e) {
     e.preventDefault();
 
-    localStorage.setItem(JSON.stringify(''));
+    let updatedUser = { ...user };
+
+    if (isEditEnabled) {
+      if (passwordInputs.currentPassword !== user.password) {
+        setErrorMessage('Current Password is Incorrect');
+        return;
+      }
+
+      if (passwordInputs.newPassword !== passwordInputs.confirmPassword) {
+        setErrorMessage('New Password & Confirm Password do not match');
+        return;
+      }
+
+      updatedUser.password = passwordInputs.newPassword;
+
+      localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+      setUser(updatedUser);
+
+      setPasswordInputs({
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: '',
+      });
+
+      setIsEditEnabled(false);
+    }
   }
 
   return (
@@ -44,11 +83,16 @@ function ProfilePage() {
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form action="" className="space-y-6">
+        <form action="" className="space-y-6" onSubmit={handleSubmit}>
+          {errorMessage && (
+            <div className="text-red-500 text-sm font-medium text-center bg-red-50 p-2 rounded">
+              {errorMessage}
+            </div>
+          )}
           <div className="flex justify-between">
             <div className="sm:col-span-3">
               <label
-                htmlFor="first-name"
+                htmlFor="firstName"
                 className="block text-sm/6 font-medium text-black-100 text-left"
               >
                 First Name
@@ -65,7 +109,7 @@ function ProfilePage() {
             </div>
             <div>
               <label
-                htmlFor="last-name"
+                htmlFor="lastName"
                 className="block text-sm/6 font-medium text-black-100 text-left"
               >
                 Last Name
@@ -95,54 +139,63 @@ function ProfilePage() {
             />
           </label>
           <div className="flex justify-start">
-            <input
+            <button
               type="button"
-              value="Edit Password"
-              className="font-semibold text-indigo-400 hover:text-indigo-300"
               onClick={handleEditPassword}
-            />
+              className="font-semibold text-indigo-400 hover:text-indigo-300"
+            >
+              {'Edit Password'}
+            </button>
           </div>
           {isEditEnabled ? (
             <div>
               <label
-                htmlFor="current-password"
+                htmlFor="currentPassword"
                 className="block text-sm/6 font-medium text-black-100 text-left"
               >
                 Current Password
                 <input
                   type="password"
                   id=""
-                  name="current-password"
+                  name="currentPassword"
+                  value={passwordInputs.currentPassword}
+                  onChange={handlePasswordChange}
+                  required
                   className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base  outline-1 -outline-offset-1 outline-black/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
                 />
               </label>
               <label
-                htmlFor="new-password"
+                htmlFor="newPassword"
                 className="block text-sm/6 font-medium text-black-100 text-left"
               >
                 New Password
                 <input
                   type="password"
                   id=""
-                  name="new-password"
+                  name="newPassword"
+                  value={passwordInputs.newPassword}
+                  onChange={handlePasswordChange}
+                  required
                   className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base  outline-1 -outline-offset-1 outline-black/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
                 />
               </label>
               <label
-                htmlFor="confirm-password"
+                htmlFor="confirmPassword"
                 className="block text-sm/6 font-medium text-black-100 text-left"
               >
                 Confirm Password
                 <input
                   type="password"
                   id=""
-                  name="confirm-password"
+                  name="confirmPassword"
+                  value={passwordInputs.confirmPassword}
+                  onChange={handlePasswordChange}
+                  required
                   className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base  outline-1 -outline-offset-1 outline-black/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
                 />
               </label>
             </div>
           ) : null}
-
           <div>
             <button
               type="submit"
