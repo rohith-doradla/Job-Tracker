@@ -2,6 +2,8 @@ import React from 'react';
 
 import { useState, useEffect } from 'react';
 
+
+
 function ProfilePage() {
   const [user, setUser] = useState({
     firstName: '',
@@ -18,7 +20,7 @@ function ProfilePage() {
     confirmPassword: '',
   });
 
-  const [errorMessage, setErrorMessage] = useState();
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     const existingUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -62,22 +64,34 @@ function ProfilePage() {
       }
 
       updatedUser.password = passwordInputs.newPassword;
-
-      localStorage.setItem('currentUser', JSON.stringify(updatedUser));
-      setUser(updatedUser);
-
-      setPasswordInputs({
-        currentPassword: '',
-        newPassword: '',
-        confirmPassword: '',
-      });
-
-      setIsEditEnabled(false);
     }
+
+    localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+
+    let users = JSON.parse(localStorage.getItem('users'));
+
+    let newUsers = users.map((u) => {
+      if (u.email === updatedUser.email) {
+        return updatedUser;
+      }
+    });
+
+    localStorage.setItem('users', JSON.stringify(newUsers));
+
+    alert('Profile Updated Successfully!!');
+
+    setErrorMessage('');
+    setIsEditEnabled(false);
+    setPasswordInputs({
+      currentPassword: '',
+      newPassword: '',
+      confirmPassword: '',
+    });
   }
 
   return (
     <div className="flex flex-col justify-center">
+
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <h2>Profile</h2>
       </div>

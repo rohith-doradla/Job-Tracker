@@ -32,7 +32,7 @@ function LoginPage() {
 
       setUserInput({ email: '', password: '' });
 
-      navigate('/dashboard');
+      navigate('/');
     } else {
       alert('Please enter valid Email or Password');
     }
@@ -58,7 +58,7 @@ function LoginPage() {
                 value={userInput.email}
                 onChange={handleChange}
                 required
-                className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-black/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
+                className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base  outline-1 -outline-offset-1 outline-black/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
               />
             </label>
           </div>
@@ -75,7 +75,7 @@ function LoginPage() {
                 value={userInput.password}
                 onChange={handleChange}
                 required
-                className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-black/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
+                className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base  outline-1 -outline-offset-1 outline-black/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
               />
             </label>
           </div>
