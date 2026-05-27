@@ -16,11 +16,12 @@ function Sidebar() {
       <div>
         <div className="sidebar-header">Job Tracker</div>
         <div className="sidebar-links">
-          <Link to="/dashboard" className="sidebar-link">
+          <Link to="/" className="sidebar-link">
             Dashboard
           </Link>
           <Link to="/boards" className="sidebar-link">
             Boards
+            
           </Link>
           <Link to="/profile" className="sidebar-link">
             Profile
